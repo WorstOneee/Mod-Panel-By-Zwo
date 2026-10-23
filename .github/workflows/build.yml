@@ -1,0 +1,57 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: modpanel
+          MYSQL_DATABASE: modpanel
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pmodpanel"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Compilar e testar
+        env:
+          MODPANEL_MYSQL_HOST: 127.0.0.1
+          MODPANEL_MYSQL_PORT: 3306
+          MODPANEL_MYSQL_DATABASE: modpanel
+          MODPANEL_MYSQL_USER: root
+          MODPANEL_MYSQL_PASSWORD: modpanel
+        run: mvn -B -ntp package
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ModPanel
+          path: target/ModPanel-*.jar
+
+      - name: Publicar release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/ModPanel-*.jar

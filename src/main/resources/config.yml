@@ -1,0 +1,192 @@
+# ModPanel by Zwo
+# As mensagens ficam em messages.yml.
+
+prefix: '&8[&cModPanel&8] &7'
+
+storage:
+  # sqlite = arquivo local na pasta do plugin | mysql = servidor MySQL/MariaDB
+  # Mudanças aqui só valem depois de reiniciar o servidor.
+  type: sqlite
+  # Prefixo das tabelas (apenas letras, números e _).
+  table-prefix: 'modpanel_'
+  sqlite:
+    file: 'modpanel.db'
+  mysql:
+    host: 'localhost'
+    port: 3306
+    database: 'modpanel'
+    username: 'root'
+    password: ''
+    # Parâmetros extras da URL JDBC.
+    properties: 'useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8&serverTimezone=UTC'
+    pool:
+      maximum-size: 8
+      minimum-idle: 2
+      connection-timeout-ms: 10000
+      max-lifetime-ms: 1800000
+
+network:
+  # Ative quando mais de um servidor usa o mesmo banco MySQL.
+  # Cada servidor precisa de um server-id diferente.
+  # Com a rede ativa, bans feitos em um servidor são aplicados nos outros na próxima sincronização.
+  enabled: false
+  server-id: 'servidor-1'
+
+permissions:
+  # Quem tem a permissão "main" também pode executar as ações (compatibilidade com versões antigas).
+  legacy-main-grants-actions: true
+  main: modpanel.main
+  view: modpanel.view
+  ban: modpanel.ban
+  ipban: modpanel.ipban
+  unban: modpanel.unban
+  unban-ip: modpanel.unban-ip
+  mute: modpanel.mute
+  unmute: modpanel.unmute
+  mute-radius: modpanel.mute-radius
+  bulk: modpanel.bulk
+  sync: modpanel.sync
+  reload: modpanel.reload
+  bypass: modpanel.bypass
+  protected: modpanel.protected
+
+limits:
+  max-radius: 100
+  max-mute-minutes: 43200
+  max-tempban-days: 3650
+  # Um IP ligado a esta quantidade de contas (ou mais) não é banido; costuma ser proxy ou rede compartilhada.
+  ip-ban-account-limit: 20
+
+ban:
+  # Desconecta quem estiver online usando um IP que acabou de ser banido.
+  kick-same-ip: true
+
+ban-sync:
+  enabled: true
+  interval-seconds: 30
+
+login-check:
+  # Confere o banco na hora do login, além da banlist do Paper.
+  enabled: true
+
+voice-chat:
+  enabled: true
+  speak-permission: voicechat.speak
+  listen-permission: voicechat.listen
+  mute-listen: false
+
+chat-mute:
+  enabled: true
+  # Bloqueia o chat do jogador mutado diretamente pelo ModPanel.
+  block-chat: true
+  # Comandos bloqueados enquanto o jogador estiver mutado no chat.
+  blocked-commands:
+    - msg
+    - tell
+    - w
+    - whisper
+    - r
+    - reply
+    - me
+    - say
+    - mail
+
+commands:
+  # {player}, {perm}, {minutes}, {time} e {reason} estão disponíveis conforme a ação.
+  voice-mute-command: 'lp user {player} permission settemp {perm} false {time}'
+  voice-unmute-command: 'lp user {player} permission unset {perm}'
+  # Opcional: comando de outro plugin de chat. Deixe vazio para usar só o bloqueio do ModPanel.
+  chat-mute-command: ''
+  chat-unmute-command: ''
+
+broadcasts:
+  perm-ban:
+    enabled: true
+    chat:
+      - '&8&m--------------------------------'
+      - '&c{player} &7foi banido por &f{staff}&7.'
+      - '&7Motivo: &f{reason}'
+      - '&8&m--------------------------------'
+    title:
+      enabled: true
+      title: '&c&lBANIDO'
+      subtitle: '&f{player} &7- {reason}'
+      fade-in: 10
+      stay: 100
+      fade-out: 20
+  temp-ban:
+    enabled: true
+    chat:
+      - '&8&m--------------------------------'
+      - '&e{player} &7foi banido temporariamente por &f{staff}&7.'
+      - '&7Motivo: &f{reason}'
+      - '&7Duração: &f{duration}'
+      - '&8&m--------------------------------'
+    title:
+      enabled: true
+      title: '&e&lBAN TEMPORÁRIO'
+      subtitle: '&f{player} &7- {reason}'
+      fade-in: 10
+      stay: 100
+      fade-out: 20
+
+gui:
+  per-page: 28
+  titles:
+    main: '&8ModPanel'
+    bans: '&8Bans ativos'
+    tempbans: '&8Bans temporários'
+    ipbans: '&8Bans de IP'
+    voice: '&8Mutes ativos'
+    profile: '&8Perfil: &f{player}'
+    confirm: '&4Confirmar operação'
+  main:
+    items:
+      bans:
+        enabled: true
+        slot: 11
+        material: RED_CONCRETE
+        name: '&cBans ativos'
+        lore:
+          - '&7Perfis: &f{banned_players}'
+          - '&eClique para abrir'
+      tempbans:
+        enabled: true
+        slot: 13
+        material: CLOCK
+        name: '&eBans temporários'
+        lore:
+          - '&7Punições com expiração: &f{temp_bans}'
+          - '&eClique para abrir'
+      ipbans:
+        enabled: true
+        slot: 15
+        material: IRON_BARS
+        name: '&4Bans de IP'
+        lore:
+          - '&7IPs ativos: &f{banned_ips}'
+          - '&eClique para abrir'
+      voice:
+        enabled: true
+        slot: 29
+        material: NOTE_BLOCK
+        name: '&bMutes'
+        lore:
+          - '&7Voz: &f{voice_mutes}'
+          - '&7Chat: &f{chat_mutes}'
+          - '&eClique para abrir'
+      unbanall:
+        enabled: true
+        slot: 31
+        material: LAVA_BUCKET
+        name: '&cDesbanir todos'
+        lore:
+          - '&4Ação destrutiva'
+          - '&eExige confirmação'
+      unmuteall:
+        enabled: true
+        slot: 33
+        material: MILK_BUCKET
+        name: '&aDesmutar todos'
+        lore:
+          - '&eExige confirmação'

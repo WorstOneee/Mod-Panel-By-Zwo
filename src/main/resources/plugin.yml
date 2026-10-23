@@ -1,0 +1,126 @@
+name: ModPanel
+version: '${project.version}'
+main: dev.zwo.modpanel.ModPanelPlugin
+api-version: '1.21'
+authors: [Zwo]
+description: Painel de moderação com histórico, bans por perfil/IP, mutes e armazenamento em SQLite ou MySQL.
+softdepend: [LuckPerms, voicechat, Vulcan]
+
+libraries:
+  - com.zaxxer:HikariCP:${hikari.version}
+  - com.mysql:mysql-connector-j:${mysql.version}
+  - org.xerial:sqlite-jdbc:${sqlite.version}
+
+commands:
+  modpanel:
+    description: Abre o painel principal.
+    aliases: [mpanel]
+  banpanel:
+    description: Lista os bans ativos.
+  tempbanpanel:
+    description: Lista bans temporários.
+  ipbanpanel:
+    description: Lista bans de IP.
+  voicepanel:
+    description: Lista mutes ativos.
+  mpperfil:
+    description: Exibe o perfil e o histórico disciplinar.
+    usage: /mpperfil [jogador] [página]
+  mpban:
+    description: Bane permanentemente um perfil conhecido.
+    usage: /mpban <jogador> <motivo>
+  mptempban:
+    description: Bane temporariamente um perfil conhecido.
+    usage: /mptempban <jogador> <tempo> <motivo>
+  mpipban:
+    description: Bane o IP de um jogador ou um IP informado diretamente.
+    usage: /mpipban <jogador|ip> <motivo>
+  mpunban:
+    description: Remove o ban de um jogador e o componente de IP vinculado.
+    usage: /mpunban <jogador>
+  mpunbanip:
+    description: Remove um ban de IP e os perfis vinculados ao mesmo caso.
+    usage: /mpunbanip <ip>
+  mpunbanall:
+    description: Remove todos os bans gerenciados após confirmação.
+    usage: /mpunbanall confirm
+  mpmute:
+    description: Aplica mute de voz/chat.
+    usage: /mpmute <jogador> <minutos|tempo> [motivo]
+    aliases: [mpvcmute]
+  mpunmute:
+    description: Remove mute de voz/chat.
+    usage: /mpunmute <jogador>
+    aliases: [mpvcunmute]
+  mpunmuteall:
+    description: Remove todos os mutes após confirmação.
+    usage: /mpunmuteall confirm
+  mpmuteradius:
+    description: Muta jogadores próximos no mesmo mundo.
+    usage: /mpmuteradius <raio> <minutos|tempo> [motivo]
+    aliases: [mpradiusmute]
+  mpsyncbans:
+    description: Reconcilia o banco do plugin com as banlists do Paper.
+  mp:
+    description: Administração e diagnóstico do plugin.
+    usage: /mp [status|reload|importar]
+
+permissions:
+  modpanel.admin:
+    description: Acesso completo ao ModPanel.
+    default: op
+    children:
+      modpanel.main: true
+      modpanel.view: true
+      modpanel.ban: true
+      modpanel.ipban: true
+      modpanel.unban: true
+      modpanel.unban-ip: true
+      modpanel.mute: true
+      modpanel.unmute: true
+      modpanel.mute-radius: true
+      modpanel.bulk: true
+      modpanel.sync: true
+      modpanel.reload: true
+  modpanel.main:
+    description: Acesso básico ao painel.
+    default: op
+  modpanel.view:
+    description: Visualizar painéis e perfis.
+    default: op
+  modpanel.ban:
+    description: Aplicar bans de perfil.
+    default: op
+  modpanel.ipban:
+    description: Aplicar bans de IP.
+    default: op
+  modpanel.unban:
+    description: Remover bans de perfil.
+    default: op
+  modpanel.unban-ip:
+    description: Remover bans por IP.
+    default: op
+  modpanel.mute:
+    description: Aplicar mutes.
+    default: op
+  modpanel.unmute:
+    description: Remover mutes.
+    default: op
+  modpanel.mute-radius:
+    description: Aplicar mutes em raio.
+    default: op
+  modpanel.bulk:
+    description: Executar operações globais.
+    default: op
+  modpanel.sync:
+    description: Reconciliar banlists.
+    default: op
+  modpanel.reload:
+    description: Recarregar a configuração e importar dados.
+    default: op
+  modpanel.bypass:
+    description: Não ser afetado por mute em raio.
+    default: op
+  modpanel.protected:
+    description: Não pode ser banido ou mutado pelo painel.
+    default: false

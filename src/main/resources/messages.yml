@@ -1,0 +1,163 @@
+# Mensagens do ModPanel.
+# Cores com & e hexadecimal no formato &#RRGGBB. {prefix} usa o prefixo do config.yml.
+# Mensagens com várias linhas podem ser escritas como lista.
+
+general:
+  no-permission: '{prefix}&cVocê não possui permissão para esta ação.'
+  only-player: '{prefix}&cEste painel só pode ser aberto por um jogador.'
+  usage: '{prefix}&cUso: &f{usage}'
+  command-error: '{prefix}&cO comando falhou. Consulte o console.'
+  database-error: 'Falha de banco ao {action}. Consulte o console.'
+  invalid-duration: '{prefix}&cDuração inválida. Exemplos: 10m, 1h30m, 2d.'
+  self-target: 'Você não pode aplicar isso em si mesmo.'
+  protected-target: '{player} está protegido contra punições do painel.'
+  default-reason: 'Sem motivo informado'
+  busy: '{prefix}&eAguarde, a ação anterior ainda está sendo processada.'
+  reloaded: '{prefix}&aConfiguração e tarefas recarregadas.'
+  reload-storage-note: '{prefix}&7Mudanças em &fstorage&7 só valem depois de reiniciar o servidor.'
+
+result:
+  success: '{prefix}&a{message}'
+  failure: '{prefix}&c{message}'
+  warning: '{prefix}&e{message}'
+
+time:
+  permanent: 'Permanente'
+  never: 'Nunca'
+  expired: 'Aguardando limpeza'
+
+scope:
+  profile: 'Perfil'
+  ip: 'IP'
+  voice: 'Voz'
+  chat: 'Chat'
+
+status:
+  active: '&cAtiva'
+  revoked: '&aRemovida'
+  revoked_external: '&aRemovida fora do painel'
+  expired: '&aExpirada'
+  partial: '&eParcial'
+  review: '&eEm revisão'
+
+ban:
+  unknown-profile: 'Perfil desconhecido. O jogador precisa ter entrado no servidor pelo menos uma vez.'
+  invalid-duration: 'Duração inválida.'
+  duration-over-limit: 'A duração ultrapassa o limite configurado.'
+  duration-too-large: 'A duração é grande demais.'
+  native-profile-failed: 'O Paper não confirmou o ban do perfil; nenhuma punição ativa foi registrada.'
+  native-ip-failed: 'O perfil foi banido, mas o Paper não confirmou o ban do IP.'
+  ip-check-failed: 'O perfil foi banido, mas não foi possível validar a segurança do IP.'
+  no-known-ip: 'Nenhum IP conhecido; apenas o perfil/UUID foi banido.'
+  ip-shared: 'IP não foi banido: ele está ligado a {count} contas e pode ser o endereço de um proxy.'
+  applied: 'Punição aplicada em {player} e confirmada pelo Paper.'
+  ip-unknown: 'Não existe IP conhecido para {player}.'
+  ip-shared-blocked: 'Operação bloqueada: esse IP pertence a {count} contas e provavelmente é um proxy.'
+  ip-native-failed: 'O Paper não confirmou o ban do IP.'
+  ip-applied: 'IP {ip} banido e confirmado pelo Paper.'
+  ip-kicked: '{count} jogador(es) conectado(s) nesse IP foram desconectados.'
+  invalid-ip: 'IP inválido.'
+
+unban:
+  done: 'Perfil de {player} desbanido. {count} componente(s) encerrado(s).'
+  nothing: 'Nenhum ban ativo encontrado para {player}.'
+  native-still-banned: 'O banco foi atualizado, mas o Paper ainda reporta o perfil como banido.'
+  profile-still-active: 'O jogador ainda tem {count} outro(s) ban(s) ativo(s); o ban nativo foi mantido.'
+  ip-pardon-failed: 'Não foi possível confirmar o desban do IP {ip}.'
+  ip-still-active: 'O IP {ip} continua banido porque possui outra punição ativa.'
+  profile-pardon-failed: 'Não foi possível confirmar o desban de {player}.'
+  ip-still-banned: 'O Paper ainda reporta esse IP como banido.'
+  ip-done: 'IP {ip} e punições vinculadas foram encerrados. {count} componente(s).'
+  ip-nothing: 'Nenhum ban ativo encontrado para o IP {ip}.'
+  all-done: 'Desbanimento geral concluído: {count} componente(s).'
+  all-confirm: '{prefix}&eConfirme com &f/mpunbanall confirm&e. Isso removerá todos os bans ativos.'
+
+mute:
+  invalid-duration: 'Duração inválida ou acima do limite configurado.'
+  disabled: 'Os mutes de voz e chat estão desativados.'
+  longer-kept: 'Já existia um mute mais longo; o prazo anterior foi preservado.'
+  voice-command-failed: 'O comando de voice mute não foi aceito completamente.'
+  chat-command-failed: 'O mute de chat não foi aplicado: ative chat-mute.block-chat ou configure um comando.'
+  applied: 'Mute aplicado em {player} por {minutes} minuto(s).'
+  target-notice: '{prefix}&cVocê foi mutado por &f{minutes} minuto(s)&c. Motivo: &f{reason}'
+  removed: 'Mute de {player} removido: {count} componente(s).'
+  removed-notice: '{prefix}&aSeu mute foi removido.'
+  none-active: 'Nenhum mute ativo encontrado para {player}.'
+  all-done: 'Desmute geral concluído: {count} jogador(es).'
+  all-confirm: '{prefix}&eConfirme com &f/mpunmuteall confirm&e.'
+  chat-blocked: '{prefix}&cVocê está mutado no chat. Restam &f{remaining}&c.'
+  command-blocked: '{prefix}&cVocê não pode usar esse comando enquanto estiver mutado.'
+  positive-minutes: 'Use uma duração maior que zero (ex.: 30, 30m, 2h).'
+  radius-invalid: 'Raio ou duração inválidos/acima do limite configurado.'
+  radius-done: '{prefix}&aMute em raio concluído: &f{count} &ajogador(es).'
+  radius-failed: '{prefix}&eFalharam: &f{players}'
+  radius-reason: 'Mute em área aplicado pela staff'
+
+kick:
+  permanent:
+    - '&cVocê foi banido.'
+    - '&7Motivo: &f{reason}'
+    - '&7Aplicado por: &f{staff}'
+  temporary:
+    - '&cVocê foi banido temporariamente.'
+    - '&7Motivo: &f{reason}'
+    - '&7Tempo restante: &f{remaining}'
+  ip:
+    - '&cEste endereço de IP foi banido.'
+    - '&7Motivo: &f{reason}'
+
+profile:
+  usage: '/mpperfil <jogador> [página]'
+  header: '&8&m----------&r &cPerfil: &f{player} &8&m----------'
+  line: '&8#{id} &f{scope} &7| {status} &7| &f{reason} &7| &7{date}'
+  empty: '&7Nenhuma punição registrada.'
+  more: '&7Use &f/mpperfil {player} {next} &7para ver a próxima página.'
+
+sync:
+  result: '{prefix}&aSincronização: importados={imported}, removidos externos={revoked}, reparados={repaired}, aplicados da rede={applied}, revisão={review}.'
+  failed: '{prefix}&cA sincronização falhou: {error}'
+  busy: '{prefix}&eJá existe uma sincronização em andamento; ela foi reagendada.'
+
+status:
+  counts: '{prefix}&bStatus &7| Perfis: &f{profiles} &7| IPs: &f{ips} &7| Voz: &f{voice} &7| Chat: &f{chat}'
+  native: '&7Banlist nativa: &f{profiles} perfis&7, &f{ips} IPs'
+  storage: '&7Armazenamento: &f{storage} &7| Servidor: &f{server} &7| Rede: &f{network}'
+
+import:
+  usage: '/mp importar sqlite confirm'
+  not-mysql: '{prefix}&cA importação só é usada quando o armazenamento atual é MySQL.'
+  missing-file: '{prefix}&cArquivo SQLite não encontrado: &f{file}'
+  not-empty: '{prefix}&cO banco atual já possui punições. A importação só é feita em um banco vazio.'
+  started: '{prefix}&7Importando dados do SQLite, aguarde...'
+  done: '{prefix}&aImportação concluída: &f{punishments} &apunições e &f{identities} &aperfis.'
+  failed: '{prefix}&cA importação falhou: {error}'
+
+gui:
+  load-error: '{prefix}&cNão foi possível carregar os dados do painel.'
+  invalid-action: 'Ação inválida.'
+  previous: '&ePágina anterior'
+  next: '&ePróxima página'
+  back: '&bMenu principal'
+  refresh: '&eAtualizar'
+  refresh-lore: '&7Página {page}'
+  empty: '&7Nada por aqui'
+  confirm: '&aConfirmar'
+  confirm-lore:
+    - '&7Alvo: &f{target}'
+    - '&cEsta ação altera punições ativas.'
+  cancel: '&cCancelar'
+  cancel-lore: '&7Voltar sem alterar nada'
+  record:
+    name: '&f{target}'
+    lore:
+      - '&7Caso: &f{case}'
+      - '&7Escopo: &f{scope}'
+      - '&7Estado: {status}'
+      - '&7Motivo: &f{reason}'
+      - '&7Autor: &f{actor}'
+      - '&7Origem: &f{origin}'
+      - '&7Criada: &f{created}'
+      - '&7Expira: &f{expires}'
+    click-remove: '&eClique esquerdo para revisar a remoção'
+    click-profile: '&eClique direito para ver o perfil'
+    unknown: 'Desconhecido'
