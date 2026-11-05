@@ -1,5 +1,6 @@
 package dev.zwo.modpanel;
 
+import dev.zwo.modpanel.api.ProfileBanApi;
 import dev.zwo.modpanel.command.ModPanelCommand;
 import dev.zwo.modpanel.config.ConfigFiles;
 import dev.zwo.modpanel.config.Messages;
@@ -14,6 +15,7 @@ import dev.zwo.modpanel.paper.BanGateway;
 import dev.zwo.modpanel.service.ActiveCache;
 import dev.zwo.modpanel.service.MuteService;
 import dev.zwo.modpanel.service.Notifier;
+import dev.zwo.modpanel.service.ProfileBanService;
 import dev.zwo.modpanel.service.PunishmentService;
 import dev.zwo.modpanel.service.SyncService;
 import dev.zwo.modpanel.service.Tasks;
@@ -30,6 +32,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -99,6 +102,10 @@ public final class ModPanelPlugin extends JavaPlugin {
         resolver = new TargetResolver(repository, tasks, this::settings);
         punishments = new PunishmentService(repository, gateway, resolver, tasks, messages, notifier, cache,
                 this::settings, getLogger());
+        // API para automações (ZwoVulcanBridge): ban temporário só por perfil, nunca IP.
+        ProfileBanService profileBans = new ProfileBanService(repository, gateway, punishments, tasks, notifier, cache,
+                this::settings, getLogger());
+        getServer().getServicesManager().register(ProfileBanApi.class, profileBans, this, ServicePriority.Normal);
         mutes = new MuteService(repository, resolver, tasks, messages, cache, this::settings, getLogger());
         sync = new SyncService(repository, gateway, tasks, notifier, cache, this::settings, getLogger());
         gui = new GuiManager(repository, punishments, mutes, resolver, messages, tasks, this::settings, this::config,
@@ -125,6 +132,7 @@ public final class ModPanelPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        getServer().getServicesManager().unregisterAll(this);
         cancelTasks();
         if (tasks != null) {
             tasks.shutdown();
