@@ -63,7 +63,15 @@ public final class PunishmentService {
     // ------------------------------------------------------------------ ban
 
     public CompletableFuture<ActionResult> banPermanent(Actor actor, String target, String reason) {
-        return run("aplicar o ban", () -> applyBan(actor, target, sanitizeReason(reason), null));
+        return run("aplicar o ban", () -> applyBan(actor, target, sanitizeReason(reason), null, true));
+    }
+
+    /**
+     * Ban permanente somente do perfil (UUID). Nunca grava nem bloqueia IP e não desconecta outras contas.
+     * Feito para automações (ex.: ZwoVulcanBridge), em que um IP compartilhado não pode pagar pelo erro.
+     */
+    public CompletableFuture<ActionResult> banProfileOnly(Actor actor, String target, String reason) {
+        return run("aplicar o ban de perfil", () -> applyBan(actor, target, sanitizeReason(reason), null, false));
     }
 
     public CompletableFuture<ActionResult> tempBan(Actor actor, String target, Duration duration, String reason) {
@@ -80,10 +88,11 @@ public final class PunishmentService {
         } catch (ArithmeticException e) {
             return done(fail("ban.duration-too-large"));
         }
-        return run("aplicar o ban", () -> applyBan(actor, target, sanitizeReason(reason), expiresAt));
+        return run("aplicar o ban", () -> applyBan(actor, target, sanitizeReason(reason), expiresAt, true));
     }
 
-    private ActionResult applyBan(Actor actor, String input, String reason, Long expiresAt) throws Exception {
+    private ActionResult applyBan(Actor actor, String input, String reason, Long expiresAt, boolean allowIp)
+            throws Exception {
         ResolvedTarget target;
         try {
             target = resolver.resolve(input);
@@ -117,7 +126,9 @@ public final class PunishmentService {
         boolean includeIp = false;
         List<PunishmentRecord> previousIp = List.of();
         Long ipExpiry = null;
-        if (ip != null && !ip.isBlank()) {
+        if (!allowIp) {
+            warnings.add(messages.raw("ban.profile-only"));
+        } else if (ip != null && !ip.isBlank()) {
             try {
                 int accounts = repository.knownNameCountForIp(ip);
                 if (accounts >= s.ipAccountLimit()) {

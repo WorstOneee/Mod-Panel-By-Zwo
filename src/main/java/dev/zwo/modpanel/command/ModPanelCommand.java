@@ -39,7 +39,7 @@ public final class ModPanelCommand implements CommandExecutor, TabCompleter {
 
     private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
             .withZone(ZoneId.systemDefault());
-    private static final Set<String> PLAYER_TARGET = Set.of("mpban", "mptempban", "mpipban", "mpmute", "mpperfil");
+    private static final Set<String> PLAYER_TARGET = Set.of("mpban", "mpbanperfil", "mptempban", "mpipban", "mpmute", "mpperfil");
 
     private final ModPanelPlugin plugin;
 
@@ -66,6 +66,7 @@ public final class ModPanelCommand implements CommandExecutor, TabCompleter {
                 case "voicepanel" -> openPanel(sender, "voice", args);
                 case "mpperfil" -> profile(sender, args);
                 case "mpban" -> ban(sender, args, false);
+                case "mpbanperfil" -> profileBan(sender, args);
                 case "mptempban" -> ban(sender, args, true);
                 case "mpipban" -> ipBan(sender, args);
                 case "mpunban" -> unban(sender, args);
@@ -185,6 +186,18 @@ public final class ModPanelCommand implements CommandExecutor, TabCompleter {
         } else {
             reply(sender, plugin.punishments().banPermanent(actor, args[0], join(args, 1)));
         }
+    }
+
+    /** Ban permanente só do perfil/UUID: não toca em IP (seguro para automações e IPs compartilhados). */
+    private void profileBan(CommandSender sender, String[] args) {
+        if (!allowed(sender, "ban")) {
+            return;
+        }
+        if (args.length < 2) {
+            usage(sender, "/mpbanperfil <jogador|uuid> <motivo>");
+            return;
+        }
+        reply(sender, plugin.punishments().banProfileOnly(actor(sender), args[0], join(args, 1)));
     }
 
     private void ipBan(CommandSender sender, String[] args) {

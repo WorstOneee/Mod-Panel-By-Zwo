@@ -44,7 +44,7 @@ public final class ModPanelPlugin extends JavaPlugin {
 
     private static final String[] COMMANDS = {
             "modpanel", "banpanel", "tempbanpanel", "ipbanpanel", "voicepanel", "mpperfil",
-            "mpban", "mptempban", "mpipban", "mpunban", "mpunbanip", "mpunbanall",
+            "mpban", "mpbanperfil", "mptempban", "mpipban", "mpunban", "mpunbanip", "mpunbanall",
             "mpmute", "mpunmute", "mpunmuteall", "mpmuteradius", "mpsyncbans", "mp"
     };
 
