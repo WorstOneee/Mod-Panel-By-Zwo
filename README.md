@@ -73,7 +73,8 @@ de um servidor é entendido como remoção externa, enquanto um ban vindo de out
 | `/modpanel` (`/mpanel`) | Painel principal |
 | `/banpanel`, `/tempbanpanel`, `/ipbanpanel`, `/voicepanel` | Listas de punições ativas |
 | `/mpperfil [jogador] [página]` | Perfil e histórico |
-| `/mpban <jogador> <motivo>` | Ban permanente |
+| `/mpban <jogador> <motivo>` | Ban permanente (perfil e, se for seguro, o último IP) |
+| `/mpbanperfil <jogador\|uuid> <motivo>` (`/mpbanprofile`) | Ban permanente **só do perfil/UUID**: nunca bane IP nem derruba outras contas. Indicado para automações como a ZwoVulcanBridge |
 | `/mptempban <jogador> <tempo> <motivo>` | Ban temporário (`30m`, `1h30m`, `7d`, `1mo`...) |
 | `/mpipban <jogador\|ip> <motivo>` | Ban de IP |
 | `/mpunban <jogador>` | Remove o ban do jogador e o IP vinculado ao mesmo caso |

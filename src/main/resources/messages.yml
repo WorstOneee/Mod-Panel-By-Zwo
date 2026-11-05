@@ -49,6 +49,7 @@ ban:
   native-ip-failed: 'O perfil foi banido, mas o Paper não confirmou o ban do IP.'
   ip-check-failed: 'O perfil foi banido, mas não foi possível validar a segurança do IP.'
   no-known-ip: 'Nenhum IP conhecido; apenas o perfil/UUID foi banido.'
+  profile-only: 'Ban somente de perfil: nenhum IP foi banido.'
   ip-shared: 'IP não foi banido: ele está ligado a {count} contas e pode ser o endereço de um proxy.'
   applied: 'Punição aplicada em {player} e confirmada pelo Paper.'
   ip-unknown: 'Não existe IP conhecido para {player}.'

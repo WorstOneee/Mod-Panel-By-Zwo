@@ -29,6 +29,10 @@ commands:
   mpban:
     description: Bane permanentemente um perfil conhecido.
     usage: /mpban <jogador> <motivo>
+  mpbanperfil:
+    description: Bane permanentemente só o perfil (UUID), sem banir IP.
+    usage: /mpbanperfil <jogador|uuid> <motivo>
+    aliases: [mpbanprofile]
   mptempban:
     description: Bane temporariamente um perfil conhecido.
     usage: /mptempban <jogador> <tempo> <motivo>
