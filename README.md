@@ -117,6 +117,27 @@ continua com os nós `serpens.modpanel.*`, porque o config antigo é reaproveita
 - **Chat**: o próprio ModPanel bloqueia o chat e os comandos de `chat-mute.blocked-commands`. Se você usa
   outro plugin de chat, dá para configurar `chat-mute-command` também.
 
+## API para outros plugins (3.1.0+)
+
+O ModPanel registra no `ServicesManager` do Bukkit a interface `dev.zwo.modpanel.api.ProfileBanApi`
+(`API_VERSION = 1`). Ela faz **ban temporário só do perfil (UUID)**, nunca de IP, e devolve um resultado
+conferido. Os comandos manuais (`/mpban`, `/mptempban`, `/mpbanperfil`...) não mudaram.
+
+```java
+ProfileBanApi api = Bukkit.getServicesManager().load(ProfileBanApi.class);
+api.tempBanProfile(new ProfileBanRequest(uuid, nome, Duration.ofHours(24), motivo, "MeuPlugin", idDoPedido))
+   .thenAccept(r -> { /* r.status(), r.verified(), r.ipBanned(), r.punishmentId() */ });
+```
+
+- `status`: `APPLIED` (aplicado agora), `ALREADY_BANNED` (já havia ban ativo ou o mesmo pedido já foi feito),
+  `REJECTED` (alvo protegido, duração inválida...), `FAILED` (erro; se o banco falhar o ban nativo é desfeito,
+  e se o ban nativo falhar fica só um registro PARCIAL no histórico).
+- `verified = true` só depois de conferir o ban ativo no banco **e** no Paper. `ipBanned` é sempre `false`.
+- `requestId` evita duplicata: o mesmo pedido repetido devolve `ALREADY_BANNED` com o ID original.
+- A duração respeita `limits.max-tempban-days`. Quem tem a permissão de protegido é recusado.
+- O registro aparece no histórico com origem `API` e o `actor` informado.
+- O future pode completar em outra thread; volte para a thread do servidor antes de usar a API do Bukkit.
+
 ## Compilando
 
 ```bash
